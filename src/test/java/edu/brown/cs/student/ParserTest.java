@@ -27,6 +27,7 @@ public class ParserTest {
   Parser<List<String>> incomeByRaceParser;
   Parser<List<String>> malformedParser;
   Parser<List<String>> quoteMishapParser;
+  Parser<List<String>> habitatParser;
 
   // test parsing uniformed CSV
   @Test
@@ -95,7 +96,44 @@ public class ParserTest {
     }
 
   }
-  // test:
+  // test: normal behavior on inputs that exercise different functionality (e.g., CSV data with and without column headers)
 
-  // test:
+  // test for parsing success given no column headers
+  @Test
+  public void testParseBirdNoColumnHeaderCSV() {
+    try {
+      habitatParser = new Parser<List<String>>("data/birds/habitat.csv", new TrivialCreator());
+      habitatParser.parse();
+    } catch (IOException | FactoryFailureException e) {
+      throw new RuntimeException(e);
+    }
+
+    assertEquals(5, habitatParser.getParsedContent().size());
+
+    // this assertEquals fails. Should it fail & count all 4 empty spaces if there are only 2 entries?
+    assertEquals(2, habitatParser.getParsedContent().get(2).size());
+    assertEquals(1, habitatParser.getParsedContent().get(4).size());
+    assertEquals(4, habitatParser.getParsedContent().get(0).size());
+    assertEquals(
+        List.of(
+            // coniferous, lakes, plants, grasslands
+            "coniferous",
+            "lakes",
+            "plants",
+            "grasslands"),
+        habitatParser.getParsedContent().get(0));
+    assertFalse(habitatParser.getParsedContent().contains(List.of("Sparrow", "Scrub Jay", "Owl")));
+  }
+
+  // test: CSV data in different reader types (e.g. StringReader and FileReader)
+  // I suppose we are currently using file reader bc CSV files are files? or string reader because we're parsing those
+  // files?
+  // right now, I think we're just testing for String reader because we are testing the case where
+  // we have a path to the file?
+  // but how can we do something else? How do we pass in a reader?
+
+  // test: CSV data with inconsistent column count (what does this mean?)
+
+  // CSV data when reader itself throws an exception
+  // Q: are these IOException, FactoryFailureException exceptions or something else?
 }
