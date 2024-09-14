@@ -1,7 +1,13 @@
 # Sprint 1: Extensible CSV Parser 
 a modified CSV parser to accomdate different data sources and ways to parse a CSV file into different data types. 
+
+
 slloydge 
+
+
 total estimated time to complete: 11 hours 
+
+
 link to repo: https://github.com/sophialloydgeorge628/CSVParser
 
 Citations: 
