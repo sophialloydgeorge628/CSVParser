@@ -23,7 +23,8 @@ public class Parser<T> {
   private List<T> parsedContent;
 
   /**
-   * CreatorFromRow is an interface that
+   * CreatorFromRow is an interface where T is a type parameter describing what the parser should
+   * return for each row, given that row is initially a list of strings
    */
   private CreatorFromRow<T> creator;
 

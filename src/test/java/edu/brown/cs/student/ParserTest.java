@@ -12,18 +12,11 @@ import org.junit.jupiter.api.Test;
 import Parser.SkipHeaderCreator;
 
 /**
- * TODO: add more tests in this file to build an extensive test suite for your parser and parsing
  * functionalities
  *
  * <p>Tests for the parser class
  */
 
-/**
- * Some ideas for tests I might want to write: 1) tests for CSV files with more than one comma 2)
- * What if we don't know that the first line is meaningful? (e.g., in ri earnings disparity, that
- * seemed to be the case?) 3) what about total? What if the lines represent different things? How to
- * parse it?
- */
 public class ParserTest {
 
   Parser<List<String>> incomeByRaceParser;
@@ -31,7 +24,7 @@ public class ParserTest {
   Parser<List<String>> quoteMishapParser;
   Parser<List<String>> habitatParser;
 
-  // test parsing uniformed CSV
+  // test parsing uniform CSV
   @Test
   public void testParseRegCSV() {
     try {
@@ -131,6 +124,9 @@ public class ParserTest {
         habitatParser.getParsedContent().get(0));
   }
 
+  /**
+   * Testing for trailing comma
+   */
   @Test
   public void testParseBirdSizeOfTrailingComma() {
     try {
@@ -142,6 +138,9 @@ public class ParserTest {
     assertEquals(2, habitatParser.getParsedContent().get(4).size());
   }
 
+  /**
+   * Testing size for Bird/habitat data
+   */
   @Test
   public void testParseBirdSizeOfStandardLine() {
     try {
@@ -153,6 +152,9 @@ public class ParserTest {
     assertEquals(4, habitatParser.getParsedContent().get(0).size());
   }
 
+  /**
+   * testing to ensure that the right contents were in the CSV file
+   */
   @Test
   public void testParseContainsHabitats() {
     try {
@@ -187,7 +189,9 @@ public class ParserTest {
         eclecticParser.getParsedContent().get(0));
   }
 
-  // test: CSV data with inconsistent column count (what does this mean?)
+  /**
+   * testing factory failure exception
+   */
   @Test
   public void factoryFailureExceptionTest() {
     String stringReaderWords = "Magnanimous,esoteric,ebullient,axiom";
@@ -197,6 +201,12 @@ public class ParserTest {
         new Parser<List<Float>>(new StringReader(stringReaderWords), new FloatCreator());
     assertThrows(FactoryFailureException.class, eclecticParser::parse);
   }
+
+  /**
+   * testing that float creator works
+   * @throws IOException
+   * @throws FactoryFailureException
+   */
 
   @Test
   public void floatCreatorTest() throws IOException, FactoryFailureException {
@@ -212,6 +222,9 @@ public class ParserTest {
   }
 
 
+  /**
+   * testing to ensure that skipHeader class works
+   */
   @Test
   public void skipHeaderTest() {
     try {
