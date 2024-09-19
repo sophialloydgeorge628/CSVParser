@@ -1,0 +1,28 @@
+Reflection 
+
+1.1) Brainstorming on your own, what errors do you need to handle? What do you think it means to “handle errors gracefully”? 
+In my view, handling errors gracefully would suggest that a testing suite is robust and covers edge cases in such a way that the cause of an error is evident to the programmers. Accordingly, when creating a constructor that could accept any object that extends the Reader abstract class, it's essential to consider which errors might occur if there's, say, a mismatch of types passed into a given method, an issue in creating a row of parsed content, or a different data source (not a CSV) passed into a method. In anticipation of such errors, I would add a "throws X exception" according to the exception that might occur. 
+
+1.2) What edge cases did the LLM miss? It is unlikely that the LLM will suggest all edge cases (although it could) because it lacks the full context of your application. So please remember to ensure that your error handling will meet expectations, even if it means handling things the LLM did not suggest.
+
+The LLM suggested handling errors for 1) custom exceptions (e.g., FactoryFailureException, ReaderException); 2) recommended that I add them to the method signature; 3) use logging (e.g., system.out); and 4) handle reader-related errors gracefully (I/O errors); 5) wrap Reader-related exceptions (e.g., IOExceptions) in a meaningful custom exception. The LLM has impressively thorough; however, one error that I thought could occur is in the way in which the CSV data is parsed: for instance, what if a user wishes to skip the first line if it's a header? To anticipate such a concern, I added an additional class for skipping the header if a user chooses to do so. Overall, though, I felt that its error handling was quite comprehensive. 
+
+
+1.3) Write a citation for the LLM following this format and include a short note about how you used the LLM. In future assignments, if you use an LLM, you are expected to cite it similarly. Include your citation both as a response to this question and in the README.
+
+OpenAI. (2024). GPT-4. (Mar 13 version). [Large language model]. https://chat.openai.com/chat/
+
+I used GPT to make recommendations about error handling and to give advice about chaining constructors, as I expected that I would need to allow for passing in both a reader object and a path to file 
+
+2. What makes a CSV parser for this sprint "correct"? We're not asking for additional input-output pairs here, but fairly precise, natural-language descriptions. Put another way, what kinds of general properties should your tests be checking about your CSV parser?
+- reads lines from either a reader object or from a file, converts them to a list of strings, and then converts that list of strings to a specified data type (e.g., list of floats, list of ints, etc.) 
+- should be flexible with regard to the data source to allow for parsing many possible data sources that could be provided. 
+
+3. Suppose we gave you a class that randomly produced CSV data on demand. You could then call this class from your testing code. How might you use this source of random data to expand the power of your testing?
+
+I would use this class to generate a wider array of possible CSV data that could exist, write appropriate creators (depending on the intended output and considerations of working around peculiarities of data) for edge cases which would all implement CreatorFromRow, and then write tests to ensure that it was effective. I might also change parse if I felt it ought to be parsing files differently according to the particular file (currently, it parses according to a specific regex format) 
+
+4. In what ways did this sprint differ from prior programming assignments you’ve done? Did anything surprise you? Did you encounter any bugs during your work on this sprint? If yes, what were they and how did you fix them? If not, how do you think that you managed to avoid them? 
+
+This sprint felt very open-ended, such that I felt empowered to interpret and implement the project as I thought was best. At times, this autonomy left me feeling somewhat lost; in the end, however, I hope that I developed an appropriate CSV parser, though there are always more edge cases to consider. 
+

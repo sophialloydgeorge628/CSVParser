@@ -221,6 +221,7 @@ public class ParserTest {
         arbitraryFloat.getParsedContent().get(0));
   }
 
+
   /**
    * testing to ensure that skipHeader class works
    */
