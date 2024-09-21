@@ -17,8 +17,7 @@ public class UtilityTest {
   @Test
   public void testUtilityProgram(){
     try {
-      UtilityProgram utility = new UtilityProgram("data/stars/stardata.csv", "Eura", 0, "ProperName",
-          ColumnIdentifier.ALL_COLUMNS);
+      UtilityProgram utility = new UtilityProgram("data/stars/stardata.csv", "Eura");
       assertEquals(
           List.of(List.of(
               "8","Eura","174.01562","0.08288","84.44669")),
