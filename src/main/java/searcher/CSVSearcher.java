@@ -1,12 +1,19 @@
-package Parser;
+package searcher;
 
-import java.io.FileReader;
+import parser.Parser;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.zip.DataFormatException;
+import parser.FactoryFailureException;
+import parser.TrivialCreator;
 
-public class UtilityProgram {
+/**
+ * CSVSearcher, a program which renders a CSV datasource search more specific
+ */
+
+public class CSVSearcher {
 
   /**
    * filename, denoting the name of a file
@@ -15,15 +22,14 @@ public class UtilityProgram {
 
   /**
    * the value (a String) to search for
-   *
-   * @param <T>
    */
+
   private final String value;
 
   /**
    * a column indexer
    *
-   * @param <T>
+   * @param <T> , which represents a specified column index through which to search
    */
 
   private final Optional<Integer> columnIndex;
@@ -31,20 +37,33 @@ public class UtilityProgram {
   /**
    * column name: searches column by name
    *
-   * @param <T>
+   * @param <T> String, which will be a string; otherwise, the optional will return nothing
    */
 
   private final Optional<String> columnName;
 
   /**
-   * Parser
+   * Parser, representing the list of parsed content
    */
 
   private final Parser<List<String>> parser;
 
 
   // have three constructors instead of pattern matching
-  private UtilityProgram(String fileName, String value, Optional<Integer> columnIndex,
+  // used trivial creator
+
+  /**
+   * Constructor for CSV searcher
+   * @param fileName, the parsed CSV datasource
+   * @param value, the string for which to search
+   * @param columnIndex, the index to which to narrow the search
+   * @param columnName, the column through which to narrow the search
+   * @throws IOException, an input output exception, indicating an issue with reading from a file,
+   * etc.
+   * @throws FactoryFailureException, an exception suggesting an issue with initializing objects,
+   *
+   */
+  private CSVSearcher(String fileName, String value, Optional<Integer> columnIndex,
       Optional<String> columnName)
       throws IOException, FactoryFailureException {
     this.fileName = fileName;
@@ -55,38 +74,39 @@ public class UtilityProgram {
     this.parser.parse();
   }
 
-  // column index
-
-  public UtilityProgram(String fileName, String value, int columnIndex)
+  // column index, which specifies a column through which to search
+  public CSVSearcher(String fileName, String value, int columnIndex)
       throws IOException, FactoryFailureException {
     this(fileName, value, Optional.of(columnIndex), Optional.empty());
   }
 
-  public UtilityProgram(String fileName, String value, String columnName)
+  // case in which we have a columnName given to us
+  public CSVSearcher(String fileName, String value, String columnName)
       throws IOException, FactoryFailureException {
-    // refactor to have none ?
+
     this(fileName, value, Optional.empty(), Optional.of(columnName));
   }
 
-  // NONE?
-  public UtilityProgram(String fileName, String value)
+  // CSV searcher, which represents the case in which no narrowing down of the search
+  public CSVSearcher(String fileName, String value)
       throws IOException, FactoryFailureException {
     this(fileName, value, Optional.empty(), Optional.empty());
   }
 
-  public int stringToIndexColumn(List<List<String>> parsedContent, String columnHeader){
-    // no guarantee that your CSV actually has a column row; could be an empty file
+  // throwing an index out of bounds exception if index == -1, which indicates that the index is -1
+  public int stringToIndexColumn(List<List<String>> parsedContent, String columnHeader) throws DataFormatException {
+    // no guarantee that CSV actually has a column row; could be an empty file
     List<String> headerRow = parsedContent.get(0);
     int headerIndex = headerRow.indexOf(columnHeader);
     if (headerIndex == -1){
-          throw new IndexOutOfBoundsException();
+          throw new DataFormatException();
       }
     else {
       return headerIndex;
     }
   }
-
-  public List<List<String>> dataSearcher() {
+   // index out of bounds would happen if row has 10 columns and you're out of bounds
+  public List<List<String>> dataSearcher() throws DataFormatException, IndexOutOfBoundsException {
     List<List<String>> parsedContent = this.parser.getParsedContent();
     List<List<String>> matchingContent = new ArrayList<>();
     // two cases: after we check for the two optional case
@@ -95,13 +115,27 @@ public class UtilityProgram {
     // otherwise, we don't call that function
     // then we have two optional integers (columnIndex which was passed in by the user)
 
-    // case in which both index & name are present
+    // case in which both index & name are present: this case shouldn't occur
     if (columnIndex.isPresent() && columnName.isPresent()) {
       throw new RuntimeException();
     }
 
     // index of column that corresponds to string column name if given
-    Optional<Integer> nameIndex = columnName.map(s -> this.stringToIndexColumn(parsedContent, s));
+    Optional<Integer> nameIndex;
+    try {
+       nameIndex = columnName.map(s -> {
+        try {
+          return this.stringToIndexColumn(parsedContent, s);
+        } catch (DataFormatException e) {
+          throw new RuntimeException(e);
+        }
+
+      });
+    }
+    // header wasn't found
+    catch (RuntimeException e){
+      throw new DataFormatException();
+    }
 
     // searching through rows, need to know matching: 1) both cases; 2) string "TOWN"; 3) or they give you a num; 4) null
     // both name * index, name but no index, index but no name, both are null (match all of the columns)

@@ -2,14 +2,14 @@ package edu.brown.cs.student;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import Parser.FactoryFailureException;
-import Parser.FloatCreator;
-import Parser.Parser;
-import Parser.TrivialCreator;
+import parser.FactoryFailureException;
+import parser.FloatCreator;
+import parser.Parser;
+import parser.TrivialCreator;
 import java.io.*;
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import Parser.SkipHeaderCreator;
+import parser.SkipHeaderCreator;
 
 /**
  * functionalities

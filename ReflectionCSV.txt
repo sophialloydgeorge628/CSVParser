@@ -26,3 +26,15 @@ I would use this class to generate a wider array of possible CSV data that could
 
 This sprint felt very open-ended, such that I felt empowered to interpret and implement the project as I thought was best. At times, this autonomy left me feeling somewhat lost; in the end, however, I hope that I developed an appropriate CSV parser, though there are always more edge cases to consider. 
 
+For Sprint 1.2:
+
+Our user stories contained goals for two different categories of user: end-users and other developers.
+How does engineering code for other developers to use (for purposes you don’t know!) change your approach to programming?
+
+In approaching this assignment, I aspired to develop more flexible code that was clearly organized
+into classes (commandLine, CSVSearcher, and so forth) to optimize for readability. Accordingly,
+privacy was a consideration that I tried to weigh, especially as it regards access to user data. This
+assignment differed from our previous ones in that it also had a user interface, which prompted me
+to consider usability, aesthetics, clarity, etc. of the command line interface. Lastly, I also threw
+fewer exceptions and printed more error messages to the terminal, so as to avoid "noisy failure" and
+disrupt the user.
